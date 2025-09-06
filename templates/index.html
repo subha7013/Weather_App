@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef6fb;
+        }
+        .container {
+            background-color: skyblue;
+            padding: 20px;
+            margin: 20px auto;
+            text-align: center;
+            border-radius: 12px;
+            width: 60%;
+            max-width: 700px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: red;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        input {
+            height: 30px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #444;
+        }
+        button {
+            width: 120px;
+            height: 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: yellow;
+            color: red;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .message {
+            background-color: beige;
+            color: purple;
+            width: 90%;
+            min-height: 100px;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 0 auto;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            white-space: pre-line; /* ✅ respects line breaks */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top">
+            <h2>🌨️ Weather.Com 💨</h2>
+        </div>
+        <div class="content">
+            <form method="post">
+                <div class="input">
+                    <h3>
+                        Enter name of a city ::  
+                        <input type="text" name="city" required>
+                    </h3>
+                </div> 
+                <div class="result">
+                    <button class="search" type="submit"><b>Search</b></button>
+                    <button class="reset" type="reset"><b>Reset</b></button>
+                </div> 
+            </form>
+        </div>
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>
