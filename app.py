@@ -27,7 +27,7 @@ def index():
                 if response.status_code == 200:
                     data = response.json()
                     message = (
-                        f"Weather in {city} 🌍\n"
+                        f"Weather in {city} ::\n"
                         f"🌡️ Temperature : {data['main']['temp']} °C\n"
                         f"🌨️ Condition : {data['weather'][0]['description'].capitalize()}\n"
                         f"☁ Humidity : {data['main']['humidity']} %\n"
@@ -46,3 +46,4 @@ def index():
 if __name__ == "__main__":
     print("🚀 Starting Flask server...")
     app.run(debug=True)
+
