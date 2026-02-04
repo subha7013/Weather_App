@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,51 +87,26 @@ body {
 }
 
 /* Bottom Info */
-.weather-card {
-  background: linear-gradient(180deg, #0b1d3a, #132f5f);
-  border-radius: 35px;
-  padding: 30px 20px;
-  color: white;
-}
-
-.about {
-  font-size: 14px;
-  opacity: 0.7;
-  margin-bottom: 10px;
-}
-
-.date {
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-.weather-icon {
-  width: 110px;
-  margin: 15px 0;
-}
-
 .weather-info {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 25px;
 }
 
-.info-box img {
-  width: 32px;
-  margin-bottom: 5px;
+.info-box {
+  text-align: center;
 }
 
 .info-box span {
-  display: block;
-  font-weight: bold;
-  margin-top: 5px;
-}
-
-.info-box small {
   font-size: 12px;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
+.info-box b {
+  display: block;
+  margin-top: 5px;
+  font-size: 16px;
+}
 
   </style>
 </head>
@@ -145,58 +121,35 @@ body {
     </form>
 
     <!-- Weather Card -->
-    {% if weather %}
-  {% if weather.error %}
-    <p style="color:red;text-align:center">{{ weather.error }}</p>
-  {% else %}
+    {% if message %}
+    <div class="weather-card">
 
-  <div class="weather-card">
+      <div class="weather-main">
+        <img src="/static/weather.png" alt="weather" class="weather-icon" />
+        <h1 class="temp">21°</h1>
+        <p class="condition">Thunderstorm</p>
+        <p class="city">Kolkata</p>
+      </div>
 
-    <!-- Top -->
-    <div class="weather-main">
-      <p class="about">About Today</p>
+      <div class="weather-info">
+        <div class="info-box">
+          <span>Humidity</span>
+          <b>80%</b>
+        </div>
+        <div class="info-box">
+          <span>Wind</span>
+          <b>12 km/h</b>
+        </div>
+        <div class="info-box">
+          <span>Feels Like</span>
+          <b>23°</b>
+        </div>
+      </div>
 
-      <img
-        class="weather-icon"
-        src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
-        alt="weather"
-      />
-
-      <p class="date">{{ weather.city }}</p>
-      <h1 class="temp">{{ weather.temp }}°</h1>
-      <p class="condition">{{ weather.condition }}</p>
     </div>
-
-    <!-- Bottom -->
-    <div class="weather-info">
-      <div class="info-box">
-        <img src="https://cdn-icons-png.flaticon.com/512/414/414974.png">
-        <span>{{ weather.humidity }}%</span>
-        <small>Humidity</small>
-      </div>
-
-      <div class="info-box">
-        <img src="https://cdn-icons-png.flaticon.com/512/1146/1146869.png">
-        <span>{{ weather.wind }} m/s</span>
-        <small>Wind</small>
-      </div>
-
-      <div class="info-box">
-        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
-        <span>{{ weather.feels_like }}°</span>
-        <small>Feels Like</small>
-      </div>
-    </div>
-
-  </div>
-
-  {% endif %}
-{% endif %}
+    {% endif %}
 
   </div>
 </body>
 </html>
-
-
-
 
