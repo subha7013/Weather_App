@@ -115,13 +115,14 @@ body {
   <div class="app">
 
     <!-- Search -->
+    
+    <!-- Weather Card -->
+    {% if message %}
     <form method="post" class="search-box">
       <input type="text" name="city" placeholder="Enter city name" required />
       <button type="submit">Search</button>
     </form>
 
-    <!-- Weather Card -->
-    {% if message %}
     <div class="weather-card">
 
       <div class="weather-main">
@@ -152,4 +153,5 @@ body {
   </div>
 </body>
 </html>
+
 
