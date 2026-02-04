@@ -1,97 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #eef6fb;
-        }
-.container {
-    background: linear-gradient(135deg, #4facfe, #f093fb); /* Soft blue → purple */
-    padding: 20px;
-    margin: 20px auto;
-    text-align: center;
-    border-radius: 12px;
-    width: 60%;
-    max-width: 700px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    color: #fff; /* Ensures text is visible */
-}
-
-        h2 {
-            color: red;
-        }
-        .content {
-            margin: 20px 0;
-        }
-        input {
-            height: 30px;
-            font-size: 16px;
-            padding: 5px 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-        }
-        button {
-            width: 120px;
-            height: 40px;
-            font-size: 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        button:hover {
-            background-color: yellow;
-            color: red;
-        }
-        .result {
-            margin-top: 20px;
-        }
-        .message {
-            background-color: white;
-            color: purple;
-            width: 90%;
-            min-height: 100px;
-            font-weight: bold;
-            font-size: 18px;
-            margin: 0 auto;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: left;
-            white-space: pre-line; /* ✅ respects line breaks */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="top">
-            <h2>Weather Now</h2>
-        </div>
-        <div class="content">
-            <form method="post">
-                <div class="input">
-                    <h3>
-                        Enter name of a city ::  
-                        <input type="text" name="city" required>
-                    </h3>
-                </div> 
-                <div class="result">
-                    <button class="search" type="submit"><b>Search</b></button>
-                    <button class="reset" type="reset"><b>Reset</b></button>
-                </div> 
-            </form>
-        </div>
-
-        {% if message %}
-            <div class="message">{{ message }}</div>
-        {% endif %}
-    </div>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,26 +86,51 @@ body {
 }
 
 /* Bottom Info */
+.weather-card {
+  background: linear-gradient(180deg, #0b1d3a, #132f5f);
+  border-radius: 35px;
+  padding: 30px 20px;
+  color: white;
+}
+
+.about {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.date {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.weather-icon {
+  width: 110px;
+  margin: 15px 0;
+}
+
 .weather-info {
   display: flex;
   justify-content: space-between;
-  margin-top: 25px;
+  margin-top: 30px;
 }
 
-.info-box {
-  text-align: center;
+.info-box img {
+  width: 32px;
+  margin-bottom: 5px;
 }
 
 .info-box span {
-  font-size: 12px;
-  opacity: 0.8;
+  display: block;
+  font-weight: bold;
+  margin-top: 5px;
 }
 
-.info-box b {
-  display: block;
-  margin-top: 5px;
-  font-size: 16px;
+.info-box small {
+  font-size: 12px;
+  opacity: 0.7;
 }
+
 
   </style>
 </head>
@@ -214,37 +145,58 @@ body {
     </form>
 
     <!-- Weather Card -->
-    {% if message %}
-    <div class="weather-card">
+    {% if weather %}
+  {% if weather.error %}
+    <p style="color:red;text-align:center">{{ weather.error }}</p>
+  {% else %}
 
-      <div class="weather-main">
-        <img src="/static/weather.png" alt="weather" class="weather-icon" />
-        <h1 class="temp">21°</h1>
-        <p class="condition">Thunderstorm</p>
-        <p class="city">Kolkata</p>
-      </div>
+  <div class="weather-card">
 
-      <div class="weather-info">
-        <div class="info-box">
-          <span>Humidity</span>
-          <b>80%</b>
-        </div>
-        <div class="info-box">
-          <span>Wind</span>
-          <b>12 km/h</b>
-        </div>
-        <div class="info-box">
-          <span>Feels Like</span>
-          <b>23°</b>
-        </div>
-      </div>
+    <!-- Top -->
+    <div class="weather-main">
+      <p class="about">About Today</p>
 
+      <img
+        class="weather-icon"
+        src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+        alt="weather"
+      />
+
+      <p class="date">{{ weather.city }}</p>
+      <h1 class="temp">{{ weather.temp }}°</h1>
+      <p class="condition">{{ weather.condition }}</p>
     </div>
-    {% endif %}
+
+    <!-- Bottom -->
+    <div class="weather-info">
+      <div class="info-box">
+        <img src="https://cdn-icons-png.flaticon.com/512/414/414974.png">
+        <span>{{ weather.humidity }}%</span>
+        <small>Humidity</small>
+      </div>
+
+      <div class="info-box">
+        <img src="https://cdn-icons-png.flaticon.com/512/1146/1146869.png">
+        <span>{{ weather.wind }} m/s</span>
+        <small>Wind</small>
+      </div>
+
+      <div class="info-box">
+        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png">
+        <span>{{ weather.feels_like }}°</span>
+        <small>Feels Like</small>
+      </div>
+    </div>
+
+  </div>
+
+  {% endif %}
+{% endif %}
 
   </div>
 </body>
 </html>
+
 
 
 
