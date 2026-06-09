@@ -3,8 +3,10 @@ import requests
 
 app = Flask(__name__)
 
-API_KEY = "d95882f9eadd331b022755a55eed0a95"
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+# API_KEY = "d95882f9eadd331b022755a55eed0a95"
+# BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+API_KEY = "bd5e378503939ddaee76f12ad7a97608"
+BASE_URL = "http://openweathermap.org/current"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
