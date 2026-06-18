@@ -3,23 +3,32 @@ import requests
 
 app = Flask(__name__)
 
-# API_KEY = "d95882f9eadd331b022755a55eed0a95"
-# BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
-API_KEY = "bd5e378503939ddaee76f12ad7a97608"
-BASE_URL = "http://openweathermap.org/current"
+API_KEY = "d95882f9eadd331b022755a55eed0a95"
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     weather_data = None
 
     if request.method == "POST":
-        city = request.form["city"]
+        city = request.form.get("city")
+        lat = request.form.get("lat")
+        lon = request.form.get("lon")
 
         params = {
-            "q": city,
             "appid": API_KEY,
             "units": "metric"
         }
+
+        # Use coordinates if provided, otherwise use city name
+        if lat and lon:
+            params["lat"] = lat
+            params["lon"] = lon
+        elif city:
+            params["q"] = city
+        else:
+            weather_data = {"error": "Please enter a city or enable location"}
+            return render_template("index.html", weather=weather_data)
 
         response = requests.get(BASE_URL, params=params)
 
