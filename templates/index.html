@@ -38,19 +38,20 @@ body {
   flex: 1;
   padding: 10px;
   border-radius: 20px;
-  border: none;
   outline: none;
   font-size: 16px;
 }
 
 .search-box button {
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  background: #4facfe;
-  color: white;
-  cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: #000b2e;
+    color: #f0dfdf;
+    cursor: pointer;
+    font-weight: bolder;
 }
+
 
 /* Weather Card */
 .weather-card {
@@ -108,6 +109,30 @@ body {
   font-size: 16px;
 }
 
+.location-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #4facfe;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.location-btn:hover {
+  background: #0080ff;
+}
+
+.location-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
   </style>
 </head>
 
@@ -115,42 +140,89 @@ body {
   <div class="app">
 
     <!-- Search -->
-    
-    <!-- Weather Card -->
-    {% if message %}
-    <form method="post" class="search-box">
-      <input type="text" name="city" placeholder="Enter city name" required />
+    <form method="post" class="search-box" id="weatherForm">
+      <input type="text" name="city" id="cityInput" placeholder="Enter city name" />
+      <input type="hidden" name="lat" id="latInput" />
+      <input type="hidden" name="lon" id="lonInput" />
+      <button type="button" class="location-btn" id="locationBtn" title="Use my location">📍</button>
       <button type="submit">Search</button>
     </form>
 
-    <div class="weather-card">
-
-      <div class="weather-main">
-        <img src="/static/weather.png" alt="weather" class="weather-icon" />
-        <h1 class="temp">21°</h1>
-        <p class="condition">Thunderstorm</p>
-        <p class="city">Kolkata</p>
-      </div>
-
-      <div class="weather-info">
-        <div class="info-box">
-          <span>Humidity</span>
-          <b>80%</b>
+    <!-- Weather Card -->
+    {% if weather %}
+      {% if weather.error %}
+        <div class="weather-card" style="background: #ff6b6b; text-align: center;">
+          <p style="font-size: 18px;">{{ weather.error }}</p>
         </div>
-        <div class="info-box">
-          <span>Wind</span>
-          <b>12 km/h</b>
-        </div>
-        <div class="info-box">
-          <span>Feels Like</span>
-          <b>23°</b>
-        </div>
-      </div>
+      {% else %}
+        <div class="weather-card">
+          <div class="weather-main">
+            <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="weather" class="weather-icon" />
+            <h1 class="temp">{{ weather.temp }}°C</h1>
+            <p class="condition">{{ weather.condition }}</p>
+            <p class="city">{{ weather.city }}</p>
+          </div>
 
-    </div>
+          <div class="weather-info">
+            <div class="info-box">
+              <span>Humidity</span>
+              <b>{{ weather.humidity }}%</b>
+            </div>
+            <div class="info-box">
+              <span>Wind</span>
+              <b>{{ weather.wind }} m/s</b>
+            </div>
+            <div class="info-box">
+              <span>Feels Like</span>
+              <b>{{ weather.feels_like }}°C</b>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     {% endif %}
 
   </div>
+
+  <script>
+    const locationBtn = document.getElementById('locationBtn');
+    const latInput = document.getElementById('latInput');
+    const lonInput = document.getElementById('lonInput');
+    const cityInput = document.getElementById('cityInput');
+    const weatherForm = document.getElementById('weatherForm');
+
+    locationBtn.addEventListener('click', () => {
+      locationBtn.disabled = true;
+      locationBtn.textContent = '⏳';
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            latInput.value = latitude;
+            lonInput.value = longitude;
+            cityInput.value = '';
+            weatherForm.submit();
+          },
+          (error) => {
+            alert('Unable to get your location: ' + error.message);
+            locationBtn.disabled = false;
+            locationBtn.textContent = '📍';
+          }
+        );
+      } else {
+        alert('Geolocation is not supported by your browser');
+        locationBtn.disabled = false;
+        locationBtn.textContent = '📍';
+      }
+    });
+
+    weatherForm.addEventListener('submit', (e) => {
+      if (!latInput.value && !lonInput.value && !cityInput.value.trim()) {
+        e.preventDefault();
+        alert('Please enter a city name or use your location');
+      }
+    });
+  </script>
 </body>
 </html>
 
