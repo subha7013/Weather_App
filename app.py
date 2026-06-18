@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
+import os
 import requests
 
 app = Flask(__name__)
 
-API_KEY = "d95882f9eadd331b022755a55eed0a95"
+API_KEY = os.environ.get("OPENWEATHER_API_KEY", "d95882f9eadd331b022755a55eed0a95")
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 @app.route("/", methods=["GET", "POST"])
@@ -30,9 +31,9 @@ def index():
             weather_data = {"error": "Please enter a city or enable location"}
             return render_template("index.html", weather=weather_data)
 
-        response = requests.get(BASE_URL, params=params)
-
-        if response.status_code == 200:
+        try:
+            response = requests.get(BASE_URL, params=params, timeout=10)
+            response.raise_for_status()
             data = response.json()
 
             weather_data = {
@@ -44,8 +45,11 @@ def index():
                 "condition": data["weather"][0]["main"],
                 "icon": data["weather"][0]["icon"]
             }
-        else:
-            weather_data = {"error": "City not found"}
+        except requests.exceptions.RequestException as e:
+            print(f"Weather API request failed: {e}")
+            weather_data = {"error": "Unable to retrieve weather data. Check your internet connection or try again later."}
+        except ValueError:
+            weather_data = {"error": "Invalid response from weather service."}
 
     return render_template("index.html", weather=weather_data)
 
